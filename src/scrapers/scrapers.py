@@ -1,10 +1,32 @@
 from scrapers.config import PERSONALITIES, PERSONALITIES_ENDPOINTS, PERSONALITIES_URL, RAW_DATA_LOC
-from scrapers.base_scraper import BaseScraper
 from scrapers.storage import saveJSON
 import random
 import time
 import shutil
 import os
+import requests
+from bs4 import BeautifulSoup
+
+class BaseScraper:
+    def __init__(self, base_url):
+        self.base_url = base_url
+
+    def fetch_page(self, url):
+        try:
+            response = requests.get(url, timeout=10)
+            response.raise_for_status()
+            return BeautifulSoup(response.text, 'html.parser')
+        except requests.RequestException as e:
+            print(f"Error fetching {url}: {e}")
+            return None
+
+    def extract_article_text(self, soup):
+        if not soup:
+            return ""
+        article = soup.find("article")
+        if article:
+            return article.get_text(separator="\n").strip()
+        return ""
 
 class PersonalitiesScraper(BaseScraper):
     def __init__(self):
@@ -25,7 +47,7 @@ class PersonalitiesScraper(BaseScraper):
         return data
     
     def reset_raw(self):
-        """Reset cleasend directory."""
+        """Reset raw directory."""
         shutil.rmtree(RAW_DATA_LOC, ignore_errors=True)
         os.makedirs(RAW_DATA_LOC, exist_ok=True)
     

@@ -1,3 +1,4 @@
 data/cleansed
 data/raw
 data/vectorized
+src/scrapers/.env
