@@ -1,0 +1,14 @@
+requests
+beautifulsoup4
+pyspellchecker
+langchain
+sentence-transformers # remove this?
+chromadb # remove this
+langchain-community
+langchain-huggingface
+langchain-chroma
+shutil
+os
+time
+random
+re
