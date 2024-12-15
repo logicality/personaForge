@@ -5,7 +5,8 @@ from langchain.schema import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 
-from scrapers.storage import getFiles, getJSON
+from scrapers.storage import JSONDataManager
+from scrapers.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED
 from embed.config import CHUNK_SIZE, CHUNK_OVERLAP, VECTOR_DB_DIR, EMBEDDING_MODEL_NAME
 
 class VectorStoreManager:
@@ -74,10 +75,11 @@ class VectorStoreManager:
         return results
 
     def personality_embed(self):
-        files = getFiles('cleansed')
+        storage_manager = JSONDataManager(CLEANSED, SIXTEEN_PERSONALITIES_LOC)
+        files = storage_manager.get_files()
 
         for file in files:
-            data = getJSON(file)
+            data = storage_manager.load_json(file)
             for key,value in data.items():
                 if key == 'ptype':
                     continue

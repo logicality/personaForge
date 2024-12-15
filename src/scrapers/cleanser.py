@@ -1,12 +1,14 @@
 import re
 from spellchecker import SpellChecker
-from scrapers.storage import getFiles, getJSON, saveJSON, CLEANSED_DATA_LOC
-import shutil
-import os
+
+from scrapers.storage import JSONDataManager
+from scrapers.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, RAW
 
 class PersonalityDataCleaner:
     def __init__(self):
         self.spellchecker = SpellChecker()
+        self.raw_storage_manager = JSONDataManager(RAW, SIXTEEN_PERSONALITIES_LOC)
+        self.cleansed_storage_manager = JSONDataManager(CLEANSED, SIXTEEN_PERSONALITIES_LOC)
 
     def remove_content_level(self, data):
         """
@@ -57,15 +59,13 @@ class PersonalityDataCleaner:
         ]
         return " ".join(corrected_words)
 
-    def reset_cleansed(self):
-        """Reset cleasend directory."""
-        shutil.rmtree(CLEANSED_DATA_LOC, ignore_errors=True)
-        os.makedirs(CLEANSED_DATA_LOC, exist_ok=True)
+    def reset_cleansed_storage(self):
+        self.cleansed_storage_manager.reset_storage()
 
     def process_personality_data(self):
-        files = getFiles()
+        files = self.raw_storage_manager.get_files()
         for file in files:
-            data = getJSON(file)
+            data = self.raw_storage_manager.load_json(file)
             data = self.remove_content_level(data)
 
             # Cleansing process
@@ -78,4 +78,4 @@ class PersonalityDataCleaner:
 
                 data[key] = value
 
-            saveJSON(data['ptype'], 'cleansed', data)
+            self.cleansed_storage_manager.save_json(data['ptype'], data)

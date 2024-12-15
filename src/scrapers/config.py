@@ -1,3 +1,9 @@
+RAW = 'raw'
+CLEANSED = 'cleansed'
+RAW_DATA_LOC = '../data/raw/'
+CLEANSED_DATA_LOC = '../data/cleansed/'
+
+# sixten personalities parameters
 PERSONALITIES_URL = "https://www.16personalities.com/"
 
 PERSONALITIES = {
@@ -30,5 +36,4 @@ PERSONALITIES_ENDPOINTS = {
     "conclusion": "-conclusion"
 }
 
-RAW_DATA_LOC = '../data/raw/'
-CLEANSED_DATA_LOC = '../data/cleansed/'
+SIXTEEN_PERSONALITIES_LOC = '16personalities/'

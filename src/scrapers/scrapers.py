@@ -1,11 +1,10 @@
-from scrapers.config import PERSONALITIES, PERSONALITIES_ENDPOINTS, PERSONALITIES_URL, RAW_DATA_LOC
-from scrapers.storage import saveJSON
 import random
 import time
-import shutil
-import os
 import requests
 from bs4 import BeautifulSoup
+
+from scrapers.config import PERSONALITIES, PERSONALITIES_ENDPOINTS, PERSONALITIES_URL, SIXTEEN_PERSONALITIES_LOC, RAW
+from scrapers.storage import JSONDataManager
 
 class BaseScraper:
     def __init__(self, base_url):
@@ -33,9 +32,17 @@ class PersonalitiesScraper(BaseScraper):
         # Initialize the base URL and any other required state
         super().__init__(PERSONALITIES_URL)
 
+        self.datatype = RAW
+        self.subpath = SIXTEEN_PERSONALITIES_LOC
+        self.personalities_endpoints = PERSONALITIES_ENDPOINTS
+        self.personalities = PERSONALITIES
+
+        # creating a raw storage manager
+        self.json_manager = JSONDataManager(self.datatype, self.subpath)
+
     def scrape_personality(self, ptype):
         data = {}
-        for section_name, endpoint in PERSONALITIES_ENDPOINTS.items():
+        for section_name, endpoint in self.personalities_endpoints.items():
             # add randomness to scrapping
             timeout = random.uniform(1,5)
             time.sleep(timeout)
@@ -45,15 +52,13 @@ class PersonalitiesScraper(BaseScraper):
             content = self.extract_article_text(soup)
             data[section_name] = {"content": content}
         return data
-    
-    def reset_raw(self):
-        """Reset raw directory."""
-        shutil.rmtree(RAW_DATA_LOC, ignore_errors=True)
-        os.makedirs(RAW_DATA_LOC, exist_ok=True)
-    
+
+    def reset_storage(self):
+        self.json_manager.reset_storage()
+
     def main(self):
-        for ptype, pname in PERSONALITIES.items():  # pylint: disable=unused-variable
+        for ptype, pname in self.personalities.items():  # pylint: disable=unused-variable
             data = self.scrape_personality(ptype)
             data['ptype'] = ptype
 
-            saveJSON(ptype, 'raw', data)
+            self.json_manager.save_json(ptype, data)
