@@ -3,8 +3,9 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
-from scrapers.config import PERSONALITIES, PERSONALITIES_ENDPOINTS, PERSONALITIES_URL, SIXTEEN_PERSONALITIES_LOC, RAW
-from scrapers.storage import JSONDataManager
+from scrapers.config import PERSONALITIES, PERSONALITIES_ENDPOINTS, PERSONALITIES_URL
+from storage.config import SIXTEEN_PERSONALITIES_LOC, RAW
+from storage.storage import JSONDataManager
 
 class BaseScraper:
     def __init__(self, base_url):

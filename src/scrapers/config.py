@@ -1,8 +1,3 @@
-RAW = 'raw'
-CLEANSED = 'cleansed'
-RAW_DATA_LOC = '../data/raw/'
-CLEANSED_DATA_LOC = '../data/cleansed/'
-
 # sixten personalities parameters
 PERSONALITIES_URL = "https://www.16personalities.com/"
 
@@ -35,5 +30,3 @@ PERSONALITIES_ENDPOINTS = {
     "workplace_habits": "s-at-work",
     "conclusion": "-conclusion"
 }
-
-SIXTEEN_PERSONALITIES_LOC = '16personalities/'

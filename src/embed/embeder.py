@@ -5,8 +5,8 @@ from langchain.schema import Document
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 
-from scrapers.storage import JSONDataManager
-from scrapers.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED
+from storage.storage import JSONDataManager
+from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED
 from embed.config import CHUNK_SIZE, CHUNK_OVERLAP, VECTOR_DB_DIR, EMBEDDING_MODEL_NAME
 
 class VectorStoreManager:

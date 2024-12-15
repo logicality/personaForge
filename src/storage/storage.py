@@ -3,7 +3,7 @@ import os
 import shutil
 from typing import List, Dict, Any
 
-from scrapers.config import RAW_DATA_LOC, CLEANSED_DATA_LOC
+from storage.config import RAW_DATA_LOC, CLEANSED_DATA_LOC
 
 class JSONDataManager:
     """

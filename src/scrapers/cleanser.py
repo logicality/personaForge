@@ -1,8 +1,8 @@
 import re
 from spellchecker import SpellChecker
 
-from scrapers.storage import JSONDataManager
-from scrapers.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, RAW
+from storage.storage import JSONDataManager
+from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, RAW
 
 class PersonalityDataCleaner:
     def __init__(self):

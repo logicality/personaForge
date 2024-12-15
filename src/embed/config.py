@@ -1,5 +1,3 @@
-CLEANSED_DATA_LOC = '../data/cleansed/'
-
 # chunk size, overlap, vector DB location, and embeeding model name for embedding words to vec
 CHUNK_SIZE = 500
 CHUNK_OVERLAP = 50
