@@ -4,7 +4,7 @@ from typing import Dict
 
 from scrapers.config import PERSONALITIES, TOPIC_COMMUNICATION
 from storage.storage import JSONDataManager
-from storage.config import RAW, CHATGPT_COMMUNICATION_PERSONALITIES_LOC
+from storage.config import RAW, CHATGPT_PERSONALITIES_LOC
 
 class ChatGPT:
     """
@@ -59,12 +59,7 @@ class PersonalityInsights(ChatGPT):
         """
         super().__init__(api_key, model)
         self.personalities = PERSONALITIES
-    
-    def create_storage_manager(self, topic):
-        storage_manager = None
-        if topic == TOPIC_COMMUNICATION:
-            storage_manager = JSONDataManager(RAW, CHATGPT_COMMUNICATION_PERSONALITIES_LOC)
-        return storage_manager
+        self.storage_manager = JSONDataManager(RAW, CHATGPT_PERSONALITIES_LOC)
 
     def create_communication_prompt(self, personality_type: str, personality_name: str) -> str:
         """
@@ -101,35 +96,22 @@ class PersonalityInsights(ChatGPT):
         response size limit of the model. Use examples or scenarios if necessary to illustrate key points.
         """
 
-    def inquire_all_personalities(self, topic: str) -> Dict[str, str]:
+    def inquire_all_personalities(self, topics: list) -> Dict[str, str]:
         """
         Iterates over all personalities and retrieves insights from ChatGPT for each.
         Returns:
             dict: A dictionary where keys are personality types and values are ChatGPT responses.
         """
-        insights = {}
         for code, name in self.personalities.items():
+            insights = {}
             prompt = ''
-            if topic == TOPIC_COMMUNICATION:
-                prompt = self.create_communication_prompt(code, name)
-            response = self.send_prompt(prompt)
-            insights[code] = response
-        return insights
+            for topic in topics:
+                if topic == TOPIC_COMMUNICATION:
+                    prompt = self.create_communication_prompt(code, name)
+                response = self.send_prompt(prompt)
+                insights[topic] = response
+
+            self.storage_manager.save_json(code, insights)
     
-    def reset_topic_storage(self, topic: str):
-        storage_manager = self.create_storage_manager(topic)
-        storage_manager.reset_storage()
-
-    def save_insights_to_json(self, insights: Dict[str, str]) -> None:
-        """
-        Save the personality insights to JSON files.
-        Args:
-            insights (dict): The personality insights dictionary.
-        """
-        storage_manager = self.create_storage_manager(TOPIC_COMMUNICATION)
-        for ptype, summary in insights.items():
-            storage_manager.save_json(ptype, {TOPIC_COMMUNICATION:summary})
-
-    def main(self, topic: str):
-        insights = self.inquire_all_personalities(topic)
-        self.save_insights_to_json(insights)
+    def reset_topic_storage(self):
+        self.storage_manager.reset_storage()

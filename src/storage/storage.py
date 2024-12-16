@@ -39,8 +39,31 @@ class JSONDataManager:
         file_path = os.path.join(data_loc, f"{filename}.json")
 
         try:
-            with open(file_path, "w", encoding="utf-8") as f:
-                json.dump(data, f, indent=2, ensure_ascii=False)
+        # Check if the file exists
+            if os.path.exists(file_path):
+                # If the file exists, load the existing data
+                with open(file_path, "r", encoding="utf-8") as f:
+                    existing_data = json.load(f)
+
+                # Ensure the existing data is a dictionary
+                if isinstance(existing_data, dict):
+                    # Check each key in the new data
+                    for key, value in data.items():
+                        if key in existing_data:
+                            # If the key exists, update the value
+                            existing_data[key] = value
+                        else:
+                            # If the key does not exist, append the new key-value pair
+                            existing_data[key] = value
+
+                    # Write the updated data back to the file
+                    with open(file_path, "w", encoding="utf-8") as f:
+                        json.dump(existing_data, f, indent=2, ensure_ascii=False)
+
+            else:
+                # If the file doesn't exist, create a new file and write the dictionary item
+                with open(file_path, "w", encoding="utf-8") as f:
+                    json.dump(data, f, indent=2, ensure_ascii=False)
         except IOError as e:
             print(f"Error saving JSON file: {e}")
 
