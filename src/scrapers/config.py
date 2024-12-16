@@ -30,3 +30,6 @@ PERSONALITIES_ENDPOINTS = {
     "workplace_habits": "s-at-work",
     "conclusion": "-conclusion"
 }
+
+#chatGPT parameters
+TOPIC_COMMUNICATION = 'communication'
