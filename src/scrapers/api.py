@@ -113,5 +113,5 @@ class PersonalityInsights(ChatGPT):
 
             self.storage_manager.save_json(code, insights)
     
-    def reset_topic_storage(self):
+    def reset_storage(self):
         self.storage_manager.reset_storage()

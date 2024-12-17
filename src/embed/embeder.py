@@ -6,11 +6,12 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_chroma import Chroma
 
 from storage.storage import JSONDataManager
-from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED
+from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, CHATGPT_PERSONALITIES_LOC
 from embed.config import CHUNK_SIZE, CHUNK_OVERLAP, VECTOR_DB_DIR, EMBEDDING_MODEL_NAME
 
 class VectorStoreManager:
-    def __init__(self, chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP, vector_db_dir=VECTOR_DB_DIR, embedding_model=EMBEDDING_MODEL_NAME):
+    def __init__(self, chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP, 
+                 vector_db_dir=VECTOR_DB_DIR, embedding_model=EMBEDDING_MODEL_NAME):
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.vector_db_dir = vector_db_dir
@@ -74,7 +75,7 @@ class VectorStoreManager:
         results = vectorstore.similarity_search(query, k=top_k)
         return results
 
-    def personality_embed(self):
+    def sixteen_personality_embed(self):
         storage_manager = JSONDataManager(CLEANSED, SIXTEEN_PERSONALITIES_LOC)
         files = storage_manager.get_files()
 
@@ -83,5 +84,15 @@ class VectorStoreManager:
             for key,value in data.items():
                 if key == 'ptype':
                     continue
+                chunks = self.chunk_text(value)
+                vs = self.embed_and_store(chunks)
+
+    def chatGPT_personality_embed(self):
+        storage_manager = JSONDataManager(CLEANSED, CHATGPT_PERSONALITIES_LOC)
+        files = storage_manager.get_files()
+
+        for file in files:
+            data = storage_manager.load_json(file)
+            for key,value in data.items():
                 chunks = self.chunk_text(value)
                 vs = self.embed_and_store(chunks)
