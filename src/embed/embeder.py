@@ -2,17 +2,27 @@ import os
 import shutil
 from langchain.schema import Document
 from langchain_chroma import Chroma
-
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_huggingface import HuggingFaceEmbeddings
-from langchain.schema import Document
 
 from storage.storage import JSONDataManager
 from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, CHATGPT_PERSONALITIES_LOC, CHATGPT_TOPIC_DETAILS_LOC
-from embed.config import CHUNK_SIZE, CHUNK_OVERLAP, VECTOR_DB_DIR, EMBEDDING_MODEL_NAME
+from embed.config import VECTOR_DB_DIR
 
 class VectorStore:
-    def __init__(self, persist_directory, collection_name="documents", embedding_function=None):
+    """
+    A class to manage vector store operations.
+    """
+
+    def __init__(self, persist_directory: str, collection_name: str = "documents", embedding_function = None):
+        """
+        Initialize the VectorStore with the given parameters.
+        
+        Args:
+            persist_directory (str): The directory to persist the vector store.
+            collection_name (str): The name of the collection in the vector store.
+            embedding_function: The function to generate embeddings.
+        """
         self.persist_directory = persist_directory
         self.collection_name = collection_name
         self.embedding_function = embedding_function
@@ -27,12 +37,19 @@ class VectorStore:
             embedding_function=self.embedding_function
         )
 
-    def add_documents(self, docs):
-        """Add documents to the vector store."""
+    def add_documents(self, docs: list):
+        """
+        Add documents to the vector store.
+        
+        Args:
+            docs (list): A list of documents to add.
+        """
         self.vectorstore.add_documents(docs)
 
     def reset(self):
-        """Reset the vector database."""
+        """
+        Reset the vector database.
+        """
         shutil.rmtree(self.persist_directory, ignore_errors=True)
         os.makedirs(self.persist_directory, exist_ok=True)
 
@@ -44,13 +61,34 @@ class VectorStore:
         )
         print(f"Vector store at '{self.persist_directory}' has been reset.")
 
-    def query(self, query, top_k=5):
-        """Query the vector store."""
+    def query(self, query: str, top_k: int = 5):
+        """
+        Query the vector store.
+        
+        Args:
+            query (str): The query string.
+            top_k (int): The number of top results to return.
+        
+        Returns:
+            list: The top_k results from the vector store.
+        """
         return self.vectorstore.similarity_search(query, k=top_k)
 
 class Embedder(VectorStore):
-    def __init__(self, model_name, chunk_size, chunk_overlap, persist_directory):
-        # Initialize the embedder and base VectorStore
+    """
+    A class to handle embedding and storing text.
+    """
+
+    def __init__(self, model_name: str, chunk_size: int, chunk_overlap: int, persist_directory: str):
+        """
+        Initialize the Embedder with the given parameters.
+        
+        Args:
+            model_name (str): The name of the embedding model.
+            chunk_size (int): The size of each text chunk.
+            chunk_overlap (int): The overlap between text chunks.
+            persist_directory (str): The directory to persist the vector store.
+        """
         self.chunk_size = chunk_size
         self.chunk_overlap = chunk_overlap
         self.model_name = model_name
@@ -61,8 +99,16 @@ class Embedder(VectorStore):
         # Pass the embedding function and other params to the base class
         super().__init__(persist_directory, embedding_function=self.embedding_function)
 
-    def chunk_text(self, text):
-        """Chunk the text into smaller pieces using LangChain's character splitter."""
+    def chunk_text(self, text: str) -> list:
+        """
+        Chunk the text into smaller pieces using LangChain's character splitter.
+        
+        Args:
+            text (str): The text to chunk.
+        
+        Returns:
+            list: A list of text chunks.
+        """
         text_splitter = RecursiveCharacterTextSplitter(
             chunk_size=self.chunk_size,
             chunk_overlap=self.chunk_overlap,
@@ -70,15 +116,33 @@ class Embedder(VectorStore):
         )
         return text_splitter.split_text(text)
 
-    def embed_and_store(self, text):
-        """Chunk, embed, and store text."""
+    def embed_and_store(self, text: str):
+        """
+        Chunk, embed, and store text.
+        
+        Args:
+            text (str): The text to embed and store.
+        """
         chunks = self.chunk_text(text)
         docs = [Document(page_content=chunk, metadata={}) for chunk in chunks]
         self.add_documents(docs)
 
 class VectorStoreManager:
-    def __init__(self, chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP, 
-                 vector_db_dir=VECTOR_DB_DIR, embedding_model=EMBEDDING_MODEL_NAME):
+    """
+    A class to manage vector store operations for different datasets.
+    """
+
+    def __init__(self, chunk_size: int = 500, chunk_overlap: int = 50,
+                 vector_db_dir: str = VECTOR_DB_DIR, embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"):
+        """
+        Initialize the VectorStoreManager with the given parameters.
+        
+        Args:
+            chunk_size (int): The size of each text chunk.
+            chunk_overlap (int): The overlap between text chunks.
+            vector_db_dir (str): The directory to persist the vector store.
+            embedding_model (str): The name of the embedding model.
+        """
         self.embedder = Embedder(
             model_name=embedding_model,
             chunk_size=chunk_size,
@@ -87,14 +151,28 @@ class VectorStoreManager:
         )
 
     def reset_vectorstore(self):
-        """Reset the vector database."""
+        """
+        Reset the vector database.
+        """
         self.embedder.reset()
 
-    def query_vectorstore(self, query, top_k=5):
-        """Query the vector database."""
+    def query_vectorstore(self, query: str, top_k: int = 5):
+        """
+        Query the vector database.
+        
+        Args:
+            query (str): The query string.
+            top_k (int): The number of top results to return.
+        
+        Returns:
+            list: The top_k results from the vector store.
+        """
         return self.embedder.query(query, top_k=top_k)
 
     def sixteen_personality_embed(self):
+        """
+        Embed and store sixteen personality data.
+        """
         storage_manager = JSONDataManager(CLEANSED, SIXTEEN_PERSONALITIES_LOC)
         files = storage_manager.get_files()
 
@@ -106,6 +184,9 @@ class VectorStoreManager:
                 self.embedder.embed_and_store(value)
 
     def chatGPT_personality_embed(self):
+        """
+        Embed and store ChatGPT personality data.
+        """
         storage_manager = JSONDataManager(CLEANSED, CHATGPT_PERSONALITIES_LOC)
         files = storage_manager.get_files()
 
@@ -115,109 +196,13 @@ class VectorStoreManager:
                 self.embedder.embed_and_store(value)
 
     def chatGPT_topic_embed(self):
+        """
+        Embed and store ChatGPT topic data.
+        """
         storage_manager = JSONDataManager(CLEANSED, CHATGPT_TOPIC_DETAILS_LOC)
         files = storage_manager.get_files()
 
         for file in files:
             data = storage_manager.load_json(file)
             for key, value in data.items():
-                self.embedder.embed_and_store(key + ":" + value)
-
-# import os
-# import shutil
-# from langchain.text_splitter import RecursiveCharacterTextSplitter
-# from langchain.schema import Document
-# from langchain_huggingface import HuggingFaceEmbeddings
-# from langchain_chroma import Chroma
-
-# from storage.storage import JSONDataManager
-# from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, CHATGPT_PERSONALITIES_LOC
-# from embed.config import CHUNK_SIZE, CHUNK_OVERLAP, VECTOR_DB_DIR, EMBEDDING_MODEL_NAME
-
-# class VectorStoreManager:
-#     def __init__(self, chunk_size=CHUNK_SIZE, chunk_overlap=CHUNK_OVERLAP, 
-#                  vector_db_dir=VECTOR_DB_DIR, embedding_model=EMBEDDING_MODEL_NAME):
-#         self.chunk_size = chunk_size
-#         self.chunk_overlap = chunk_overlap
-#         self.vector_db_dir = vector_db_dir
-#         self.embedding_model = embedding_model
-
-#         # Ensure the vector database directory exists
-#         os.makedirs(self.vector_db_dir, exist_ok=True)
-
-#     def chunk_text(self, text):
-#         """Chunk the text into smaller pieces using LangChain's character splitter."""
-#         text_splitter = RecursiveCharacterTextSplitter(
-#             chunk_size=self.chunk_size,
-#             chunk_overlap=self.chunk_overlap,
-#             length_function=len
-#         )
-#         chunks = text_splitter.split_text(text)
-#         return chunks
-
-#     def embed_and_store(self, chunks):
-#         """Embed chunks and store them in the Chroma vector database."""
-#         embeddings = HuggingFaceEmbeddings(model_name=self.embedding_model)
-        
-#         vectorstore = Chroma(
-#             collection_name="documents",
-#             persist_directory=self.vector_db_dir,
-#             embedding_function=embeddings
-#         )
-
-#         # Add chunks as documents to the vectorstore
-#         docs = [Document(page_content=chunk, metadata={}) for chunk in chunks]
-#         vectorstore.add_documents(docs)
-
-#         return vectorstore
-
-#     def reset_vectorstore(self):
-#         """Reset the vector database by deleting and recreating the directory."""
-#         shutil.rmtree(self.vector_db_dir, ignore_errors=True)
-#         os.makedirs(self.vector_db_dir, exist_ok=True)
-
-#         # Initialize an empty vector store
-#         embeddings = HuggingFaceEmbeddings(model_name=self.embedding_model)
-#         vectorstore = Chroma(
-#             collection_name="documents",
-#             persist_directory=self.vector_db_dir,
-#             embedding_function=embeddings
-#         )
-
-#         print(f"Vector store at '{self.vector_db_dir}' has been reset.")
-
-#     def query_vectorstore(self, query, top_k=5):
-#         """Query the vector database to retrieve the most relevant chunks."""
-#         embeddings = HuggingFaceEmbeddings(model_name=self.embedding_model)
-
-#         vectorstore = Chroma(
-#             collection_name="documents",
-#             persist_directory=self.vector_db_dir,
-#             embedding_function=embeddings
-#         )
-
-#         # Perform similarity search
-#         results = vectorstore.similarity_search(query, k=top_k)
-#         return results
-
-#     def sixteen_personality_embed(self):
-#         storage_manager = JSONDataManager(CLEANSED, SIXTEEN_PERSONALITIES_LOC)
-#         files = storage_manager.get_files()
-
-#         for file in files:
-#             data = storage_manager.load_json(file)
-#             for key,value in data.items():
-#                 if key == 'ptype':
-#                     continue
-#                 chunks = self.chunk_text(value)
-#                 vs = self.embed_and_store(chunks)
-
-#     def chatGPT_personality_embed(self):
-#         storage_manager = JSONDataManager(CLEANSED, CHATGPT_PERSONALITIES_LOC)
-#         files = storage_manager.get_files()
-
-#         for file in files:
-#             data = storage_manager.load_json(file)
-#             for key,value in data.items():
-#                 chunks = self.chunk_text(value)
-#                 vs = self.embed_and_store(chunks)
+                self.embedder.embed_and_store(f"{key}: {value}")

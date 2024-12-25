@@ -5,51 +5,63 @@ from storage.storage import JSONDataManager
 from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, RAW, CHATGPT_PERSONALITIES_LOC, CHATGPT_TOPIC_DETAILS_LOC
 
 class DataCleaner:
-    def __init__(self, raw_loc:str, cleansed_loc:str, subpath:str):
+    """
+    A class to clean and normalize data.
+    """
+
+    def __init__(self, raw_loc: str, cleansed_loc: str, subpath: str):
+        """
+        Initialize the DataCleaner with storage locations and subpath.
+        
+        Args:
+            raw_loc (str): The location of raw data.
+            cleansed_loc (str): The location of cleansed data.
+            subpath (str): The subpath for data storage.
+        """
         self.spellchecker = SpellChecker()
         self.raw_storage_manager = JSONDataManager(raw_loc, subpath)
         self.cleansed_storage_manager = JSONDataManager(cleansed_loc, subpath)
 
-    def remove_content_level(self, data):
+    def remove_content_level(self, data: dict) -> dict:
         """
         Removes the 'content' level from the JSON where it exists.
+        
         Args:
             data (dict): The JSON object to process.
+        
         Returns:
             dict: The processed JSON object with 'content' removed where applicable.
         """
         updated_data = {}
         for key, value in data.items():
             if isinstance(value, dict) and 'content' in value:
-                # Replace the 'content' level with its value
                 updated_data[key] = value['content']
             else:
-                # Keep the key-value pair as is
                 updated_data[key] = value
         return updated_data
 
-    def clean_text(self, raw_text):
+    def clean_text(self, raw_text: str) -> str:
         """
         Perform text cleaning and normalization.
+        
         Args:
             raw_text (str): The input text to clean.
+        
         Returns:
             str: The cleaned and normalized text.
         """
-        # Step 1: Remove special symbols
         cleaned_text = re.sub(r"[^\w\s.,!?]", "", raw_text)  # Remove non-alphanumeric and non-punctuation characters
-
-        # Step 2: Normalize case and whitespace
         cleaned_text = cleaned_text.lower()  # Convert to lowercase
         cleaned_text = re.sub(r"\s+", " ", cleaned_text).strip()  # Normalize whitespace
-
         return cleaned_text
 
-    def correct_spelling(self, text):
+    def correct_spelling(self, text: str) -> str:
         """
         Perform basic spell correction on text.
+        
         Args:
             text (str): The input text to correct.
+        
         Returns:
             str: The text with corrected spelling.
         """
@@ -59,92 +71,112 @@ class DataCleaner:
         ]
         return " ".join(corrected_words)
     
-    def get_raw_storage_manager(self):
+    def get_raw_storage_manager(self) -> JSONDataManager:
+        """
+        Get the raw storage manager.
+        
+        Returns:
+            JSONDataManager: The raw storage manager.
+        """
         return self.raw_storage_manager
     
-    def get_cleansed_storage_manager(self):
+    def get_cleansed_storage_manager(self) -> JSONDataManager:
+        """
+        Get the cleansed storage manager.
+        
+        Returns:
+            JSONDataManager: The cleansed storage manager.
+        """
         return self.cleansed_storage_manager
     
-    def reset_cleansed_storage(self):
+    def reset_cleansed_storage(self) -> None:
+        """
+        Reset the cleansed storage.
+        """
         self.cleansed_storage_manager.reset_storage()
 
 class SixteenPersonalityDataCleaner(DataCleaner):
+    """
+    A class to clean and normalize data for sixteen personalities.
+    """
+
     def __init__(self):
+        """
+        Initialize the SixteenPersonalityDataCleaner with specific storage locations.
+        """
         super().__init__(RAW, CLEANSED, SIXTEEN_PERSONALITIES_LOC)
 
-    def remove_content_level(self, data):
+    def process_personality_data(self) -> None:
         """
-        Removes the 'content' level from the JSON where it exists.
-        Args:
-            data (dict): The JSON object to process.
-        Returns:
-            dict: The processed JSON object with 'content' removed where applicable.
+        Process and clean personality data.
         """
-        updated_data = {}
-        for key, value in data.items():
-            if isinstance(value, dict) and 'content' in value:
-                # Replace the 'content' level with its value
-                updated_data[key] = value['content']
-            else:
-                # Keep the key-value pair as is
-                updated_data[key] = value
-        return updated_data
-
-    def process_personality_data(self):
         files = self.raw_storage_manager.get_files()
         for file in files:
             data = self.raw_storage_manager.load_json(file)
             data = self.remove_content_level(data)
 
-            # Cleansing process
             for key, value in data.items():
                 if key == 'ptype':
                     continue
                 value = self.clean_text(value)
                 # Uncomment the following line if you want to include spell correction
                 # value = self.correct_spelling(value)
-
                 data[key] = value
 
             self.cleansed_storage_manager.save_json(data['ptype'], data)
 
-class chatGPTPersonalityDataCleaner(DataCleaner):
+class ChatGPTPersonalityDataCleaner(DataCleaner):
+    """
+    A class to clean and normalize data for ChatGPT personalities.
+    """
+
     def __init__(self):
+        """
+        Initialize the ChatGPTPersonalityDataCleaner with specific storage locations.
+        """
         super().__init__(RAW, CLEANSED, CHATGPT_PERSONALITIES_LOC)
 
-    def process_personality_data(self):
+    def process_personality_data(self) -> None:
+        """
+        Process and clean personality data.
+        """
         files = self.raw_storage_manager.get_files()
         for file in files:
             data = self.raw_storage_manager.load_json(file)
 
-            # Cleansing process
             for key, value in data.items():
                 value = self.clean_text(value)
                 # Uncomment the following line if you want to include spell correction
                 # value = self.correct_spelling(value)
-
                 data[key] = value
 
             ptype = file.split('/')[-1].split('.')[0]
             self.cleansed_storage_manager.save_json(ptype, data)
 
-class chatGPTTopicDataCleaner(DataCleaner):
+class ChatGPTTopicDataCleaner(DataCleaner):
+    """
+    A class to clean and normalize data for ChatGPT topics.
+    """
+
     def __init__(self):
+        """
+        Initialize the ChatGPTTopicDataCleaner with specific storage locations.
+        """
         super().__init__(RAW, CLEANSED, CHATGPT_TOPIC_DETAILS_LOC)
 
-    def process_topic_details_data(self):
+    def process_topic_details_data(self) -> None:
+        """
+        Process and clean topic details data.
+        """
         files = self.raw_storage_manager.get_files()
         for file in files:
             data = self.raw_storage_manager.load_json(file)
 
-             # Extract fields
             topic = data.get("topic", "")
             description = data.get("description", "")
             explanation = data.get("explanation", "")
 
-            # Clean the text
             description = self.clean_text(description)
             explanation = self.clean_text(explanation)
 
-            ptype = file.split('/')[-1].split('.')[0]
-            self.cleansed_storage_manager.save_json(topic, {topic:explanation})
+            self.cleansed_storage_manager.save_json(topic, {topic: explanation})
