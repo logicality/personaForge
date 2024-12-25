@@ -2,7 +2,7 @@
 
 Project status: In-progress  
 Functionality implemented: RAG + LLM. Requires Ollama running on machine. 
-- Extract in-depth information about relative topic using chatGPT API
+- Extract in-depth information about relative topic using chatGPT API or other sources
 - Clean/Embed this information
 - Get user query
 - Embed user query, find relative context from vectorized database
