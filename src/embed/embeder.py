@@ -8,7 +8,7 @@ from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.schema import Document
 
 from storage.storage import JSONDataManager
-from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, CHATGPT_PERSONALITIES_LOC
+from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, CHATGPT_PERSONALITIES_LOC, CHATGPT_TOPIC_DETAILS_LOC
 from embed.config import CHUNK_SIZE, CHUNK_OVERLAP, VECTOR_DB_DIR, EMBEDDING_MODEL_NAME
 
 class VectorStore:
@@ -114,6 +114,14 @@ class VectorStoreManager:
             for key, value in data.items():
                 self.embedder.embed_and_store(value)
 
+    def chatGPT_topic_embed(self):
+        storage_manager = JSONDataManager(CLEANSED, CHATGPT_TOPIC_DETAILS_LOC)
+        files = storage_manager.get_files()
+
+        for file in files:
+            data = storage_manager.load_json(file)
+            for key, value in data.items():
+                self.embedder.embed_and_store(key + ":" + value)
 
 # import os
 # import shutil

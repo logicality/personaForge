@@ -16,3 +16,4 @@ openai
 python-dotenv
 transformers
 sentencepiece
+textwrap

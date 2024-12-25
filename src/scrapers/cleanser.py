@@ -2,7 +2,7 @@ import re
 from spellchecker import SpellChecker
 
 from storage.storage import JSONDataManager
-from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, RAW, CHATGPT_PERSONALITIES_LOC
+from storage.config import SIXTEEN_PERSONALITIES_LOC, CLEANSED, RAW, CHATGPT_PERSONALITIES_LOC, CHATGPT_TOPIC_DETAILS_LOC
 
 class DataCleaner:
     def __init__(self, raw_loc:str, cleansed_loc:str, subpath:str):
@@ -127,3 +127,24 @@ class chatGPTPersonalityDataCleaner(DataCleaner):
 
             ptype = file.split('/')[-1].split('.')[0]
             self.cleansed_storage_manager.save_json(ptype, data)
+
+class chatGPTTopicDataCleaner(DataCleaner):
+    def __init__(self):
+        super().__init__(RAW, CLEANSED, CHATGPT_TOPIC_DETAILS_LOC)
+
+    def process_topic_details_data(self):
+        files = self.raw_storage_manager.get_files()
+        for file in files:
+            data = self.raw_storage_manager.load_json(file)
+
+             # Extract fields
+            topic = data.get("topic", "")
+            description = data.get("description", "")
+            explanation = data.get("explanation", "")
+
+            # Clean the text
+            description = self.clean_text(description)
+            explanation = self.clean_text(explanation)
+
+            ptype = file.split('/')[-1].split('.')[0]
+            self.cleansed_storage_manager.save_json(topic, {topic:explanation})
