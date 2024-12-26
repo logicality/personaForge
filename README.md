@@ -14,21 +14,24 @@ The goal of this is to show usage of a model that doesn't have extensive knowled
 What above shows is, if we can provide proper context, searched using embeddings from extensive knowledge we scraped, to an LLM model, addition of that context will create factual and informative answers.
 
 ## Example run
+
 **Notes:**  The respones have not been validated for accuracy. Insights will be slowly added here
 
-**Model with context**
+**Model with Context: Response Notes**
+
 - "Edmonton Sport & Social Club's official website at: https://www.edmontonsportandsocialclub.com" is incorrect, but technically this detail was present in context, so not hallucination. This detail (hallucination possibly) was likely generated during data gathering process by chatGPT 
 
-**Model without context**
-- Hallucinating: I imagine majority of the details are hallucination, but it's difficult to tell due to high level detail. What's interesting about hallucinated measures is, they are slightly different every run
-    + "established in 1958" "serving over 3,000 members" 
+**Model without Context: Response Notes**
+
+Hallucinating: I imagine majority of the details are hallucination, but it's difficult to tell due to high level detail. What's interesting about hallucinated measures is, they are slightly different every run
+- "established in 1958" "serving over 3,000 members" 
 
 
 **Knowledge collection topic**: Edmonton_Sport_Social_Club_ESSC
 
-Query: What is Edmonton Sport & Social Club, ESSC? Give me overview, history, and services.
+**Query:**  What is Edmonton Sport & Social Club, ESSC? Give me overview, history, and services.
 
-Context: Sport Offerings: sport offerings of the edmonton sport social club essc the
+**Context:**  Sport Offerings: sport offerings of the edmonton sport social club essc the
 edmonton sport social club essc plays a vital role in the recreational landscape
 of edmonton, alberta, providing a range of sports and social activities
 throughout the year. this comprehensive overview will cover the background,
