@@ -1,6 +1,6 @@
 # personaForge
 
-Project status: In-progress  
+Project status: In-progress
 Functionality implemented: RAG + LLM. Requires Ollama running on machine. 
 - Extract in-depth information about relative topic using chatGPT API or other sources
 - Clean/Embed this information
@@ -10,14 +10,11 @@ Functionality implemented: RAG + LLM. Requires Ollama running on machine.
 
 **Why set it up like above? Why not use chatGPT to answer inquiry directly?**
 
-The goal of this work is to showcase the application of a model that lacks extensive prior knowledge on a particular topic. While it may make sense in some scenarios to use ChatGPT directly, there are cases where critical documentation or data lies outside its accessible knowledge base. In such situations, we need to scrape the relevant information and integrate it with an LLM model to enable accurate and informed responses.
+Yeah, we can query chatGPT with its vast knowledge directly. But that's not the point.
 
-This can be achieved through fine-tuning or prompt engineering. Specifically, this project focuses on building a RAG (Retrieval-Augmented Generation) + LLM configuration that simulates automatic prompt engineering by combining context and inquiry. The approach involves:
-- Scraping extensive data from external sources.
-- Using embeddings to search and retrieve relevant context.
-- Providing this context to an LLM model during inquiry handling.
+Point is, even if chatGPT is an almighty knowledge center, it can never have complete in-depth knowledge, either due to confidential documents or vast amount of information present in general. So, if we are trying to make use of chatGPT but it doesn't have in-depth knowledge we possess, why not provide it as a context. 
 
-The outcome demonstrates that when we supplement an LLM with well-constructed and relevant context, the model generates factual and informative answers. This integration of scraped knowledge significantly enhances the model's utility and reliability.
+This, obviously, isn't a novel concept. But it's a good project to explore! 
 
 ## Example run: ESSC - Edmonton Social & Sport Club
 
