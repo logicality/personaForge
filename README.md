@@ -11,16 +11,22 @@ Functionality implemented: RAG + LLM. Requires Ollama running on machine.
     + When the query relies on context information, and local model did not have that information in its original training data, model with context performs really well!
     + When the local model did have information related to query in its training data, then both version, context or not, does pretty well, arguibly, not providing context is better here, as context limits scope. This could be fixed though, by providing context as "use as needed" in prompt rather than explicit usage of context for outcome
 
-Why set it up like above? Why not use chatGPT to answer inquiry directly?
+**Why set it up like above? Why not use chatGPT to answer inquiry directly?**
 The goal of this is to show usage of a model that doesn't have extensive knowledge about a particular topic. While, in this particular case, it may make sense to use chatGPT directly, what if there is documentation of data that chatGPT is not privy too, in that case, we will need to scrape that information, and provide that information to an LLM model to answer inquiries. We can do this through fine-tuning or prompt engineering. This work focuses on building RAG + LLM configuration, simulating automatic prompt engineering (context + inquiry). 
 What above shows is, if we can provide proper context, searched using embeddings from extensive knowledge we scraped, to an LLM model, addition of that context will create factual and informative answers.
 
 ## Example run
-Knowledge collection topic: Edmonton_Sport_Social_Club_ESSC
+**Notes:** The respones have not been validated for accuracy. Insights will be slowly added here
+**Model with context**
+- 
+**Model without context**
+- Hallucinating details like "founded in 1942" "serving over 1,500 members"
 
-User Query: What is Edmonton Sport & Social Club, ESSC? Give me overview, history, and services.
+**Knowledge collection topic**: Edmonton_Sport_Social_Club_ESSC
 
-Context: Sport Offerings: sport offerings of the edmonton sport social club essc the
+**User Query**: What is Edmonton Sport & Social Club, ESSC? Give me overview, history, and services.
+
+**Context**: Sport Offerings: sport offerings of the edmonton sport social club essc the
 edmonton sport social club essc plays a vital role in the recreational landscape
 of edmonton, alberta, providing a range of sports and social activities
 throughout the year. this comprehensive overview will cover the background,
@@ -54,7 +60,7 @@ community engagement. as a fixture in the local sports scene, the essc has
 developed various sponsorship and partnership opportunities for businesses and
 organizations looking to enhance their community
 
-LLM Response with Context:
+### LLM Response with Context:
  **Edmonton Sport & Social Club (ESSC)**
 
 The Edmonton Sport & Social Club (ESSC) is a prominent recreational organization in Edmonton, Alberta, Canada. The club plays a vital role in the city's recreational landscape, providing a range of sports and social activities to promote active lifestyles, community engagement, economic contributions, health promotion, and social integration.
@@ -88,7 +94,7 @@ The ESSC continues to evolve, reflecting broader societal trends toward inclusiv
 For the most updated information on ESSC services, events, or league details, please visit the Edmonton Sport & Social Club's official website at: https://www.edmontonsportandsocialclub.com.
 
 
-LLM Response without Context:
+### LLM Response without Context:
  The Edmonton Sports and Social Club (ESSC) is a popular recreational facility located in Edmonton, Alberta, Canada. Here's an overview of the club, its history, and the services it offers:
 
 **History:**
