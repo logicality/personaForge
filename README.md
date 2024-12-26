@@ -19,6 +19,7 @@ What above shows is, if we can provide proper context, searched using embeddings
 **Model with context**
 - Hallucinating: There seems to be some hallucinations present here as well, there might be a way to sort it out
     + "Edmonton Sport & Social Club's official website at: https://www.edmontonsportandsocialclub.com"
+
 **Model without context**
 - Hallucinating: I imagine majority of the details are hallucination, but it's difficult to tell due to high level detail
     + "founded in 1942" "serving over 1,500 members" "The club operates a 18-hole golf course that is open to members and their guests."
