@@ -28,6 +28,7 @@ I thought going with Edmonton Social & Sport Club would be fun. I have played in
 Hallucinating: I imagine majority of the details are hallucination, but it's difficult to tell due to high level detail. What's interesting about hallucinated measures is, they are slightly different every run
 - "established in 1958" "serving over 3,000 members" 
 
+#### Process
 
 **Knowledge collection topic**: Edmonton_Sport_Social_Club_ESSC
 
