@@ -17,7 +17,7 @@ Point is, even if chatGPT is an almighty knowledge center, it can never have com
 
 This, obviously, isn't a novel concept. But it's a good project to explore! 
 
-It's cool, the outcome of one query from both model, I fed them into chatGPT again, and even chatGPT prefers model based on this architecture. It says the base model (witout context) "describe a generic community center rather than ESSC", which makes sense cause it did not have in-depth knowledge on this organization. 
+The outcome of one query from both model, I fed them into chatGPT to evaluate, and even chatGPT prefers model based on this architecture. Summary of chatGPT evaluation results were: Model Response with Context is more accurate but requires corrections regarding the founding year and certain overstated claims. The Model Response without Context has significant factual inaccuracies and appears to **describe a generic community center rather than ESSC**.
 
 ## Example run: ESSC - Edmonton Social & Sport Club
 
