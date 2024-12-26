@@ -1,6 +1,7 @@
 # personaForge
 
 Project status: In-progress
+
 Functionality implemented: RAG + LLM. Requires Ollama running on machine. 
 - Extract in-depth information about relative topic using chatGPT API or other sources
 - Clean/Embed this information
@@ -15,6 +16,8 @@ Yeah, we can query chatGPT with its vast knowledge directly. But that's not the 
 Point is, even if chatGPT is an almighty knowledge center, it can never have complete in-depth knowledge, either due to confidential documents or vast amount of information present in general. So, if we are trying to make use of chatGPT but it doesn't have in-depth knowledge we possess, why not provide it as a context. 
 
 This, obviously, isn't a novel concept. But it's a good project to explore! 
+
+It's cool, the outcome of one query from both model, I fed them into chatGPT again, and even chatGPT prefers model based on this architecture. It says the base model (witout context) "describe a generic community center rather than ESSC", which makes sense cause it did not have in-depth knowledge on this organization. 
 
 ## Example run: ESSC - Edmonton Social & Sport Club
 
@@ -155,6 +158,6 @@ Overall Accuracy Rating: **4/10**
 This response includes many inaccuracies and extrapolations not supported by ESSC's actual offerings.
 
 **Summary and Recommendation**
-The Model Response with Context is more accurate but requires corrections regarding the founding year and certain overstated claims. The Model Response without Context has significant factual inaccuracies and appears to describe a generic community center rather than ESSC.
+The Model Response with Context is more accurate but requires corrections regarding the founding year and certain overstated claims. The Model Response without Context has significant factual inaccuracies and appears to **describe a generic community center rather than ESSC**.
 
 If refining for accuracy, start with the Model Response with Context and correct the errors for a stronger and reliable overview.
