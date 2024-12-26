@@ -68,7 +68,7 @@ community engagement. as a fixture in the local sports scene, the essc has
 developed various sponsorship and partnership opportunities for businesses and
 organizations looking to enhance their community
 
-### LLM Response with Context:
+### Model Response with Context:
 
  The Edmonton Sport & Social Club (ESSC) is a prominent recreational organization in Edmonton, Alberta, Canada. Here's an overview of its background, history, and services:
 
@@ -94,7 +94,7 @@ The ESSC hosts various events and tournaments throughout the year, featuring loc
 As a prominent organization in the local sports scene, the ESSC offers sponsorship and partnership opportunities for businesses and organizations seeking to enhance their community engagement and promote their brand through various initiatives.
 
 
-### LLM Response without Context:
+### Model Response without Context:
 
  The Edmonton Sports & Social Club (ESSC) is a community-based organization that provides recreational, social, and sporting opportunities for individuals of all ages. Here's an overview, history, and services of the ESSC:
 
