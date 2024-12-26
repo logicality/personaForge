@@ -1,5 +1,7 @@
 # personaForge
 
+This is an experimental repository, you'll have to make tweaks to get it working on your system (not too many). 
+
 Project status: In-progress
 
 Functionality implemented: RAG + LLM. Requires Ollama running on machine. 
