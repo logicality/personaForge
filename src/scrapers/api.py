@@ -68,7 +68,7 @@ class TopicExtraction(ChatGPT):
         A primary topic, s: {topic}
         A list of already-collected sub-topics, c: {exclusionList} (these must be excluded from further suggestions).
 
-        Identify a comprehensive set of new relevant subtopics or sub-subjects, s′, that expand on s. Exclude any sub-topics appearing in .
+        Identify a comprehensive set of new relevant subtopics or sub-subjects, s′, that expand on s. Exclude any sub-topics appearing in c.
 
         For each newly identified sub-topic s′, produce a prompt (stored in a "value" field) that can later be used to gather up-to-date, in-depth information.
 
@@ -91,18 +91,19 @@ class TopicExtraction(ChatGPT):
 
     PROMPT_TOPIC_EXPLORATION = """
         System/Developer Instruction
-        You are an advanced research assistant capable of using both your internal knowledge and external sources (web scraping, if possible).
+        You are an advanced research assistant capable of using both your internal knowledge and external sources (web scraping).
 
         Task:
         You have been given a specific subtopic:short-description to explore in detail: topic:{topic} and description:{description}.
         Provide a thorough, in-depth explanation of this subtopic. Cover its background, key concepts, relevant examples, current trends, and any notable future directions or debates. Use any authoritative, up-to-date data or references that can be reliably retrieved.
 
         Constraints:
-        1. Aim for maximum completeness without exceeding the allowed response size (token limit).
-        2. Present the information in a clear, structured manner, using headings or bullet points where beneficial.
-        3. Cite external sources or data when referencing specific statistics, studies, or major developments.
-        4. Summarize or omit excessively detailed data if it would exceed the response size limit, but include as much relevant detail as possible.
-        5. Avoid purely speculative or unverified information unless clearly labeled as such.
+        1. For Web Scraping, priortize recent articles/websites for the most up-to-date information.
+        2 .Aim for maximum completeness without exceeding the allowed response size (token limit).
+        3. Present the information in a clear, structured manner, using headings or bullet points where beneficial.
+        4. Cite external sources or data when referencing specific statistics, studies, or major developments.
+        5. Summarize or omit excessively detailed data if it would exceed the response size limit, but include as much relevant detail as possible.
+        6. Avoid purely speculative or unverified information unless clearly labeled as such.
 
         Objective:
         Deliver the best possible answer on this subtopic, combining depth, clarity, and practical insights for the user.

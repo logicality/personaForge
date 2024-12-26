@@ -17,3 +17,4 @@ python-dotenv
 transformers
 sentencepiece
 textwrap
+pdfplumber
