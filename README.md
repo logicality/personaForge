@@ -12,11 +12,15 @@ Functionality implemented: RAG + LLM. Requires Ollama running on machine.
     + When the local model did have information related to query in its training data, then both version, context or not, does pretty well, arguibly, not providing context is better here, as context limits scope. This could be fixed though, by providing context as "use as needed" in prompt rather than explicit usage of context for outcome
 
 **Why set it up like above? Why not use chatGPT to answer inquiry directly?**
+
 The goal of this is to show usage of a model that doesn't have extensive knowledge about a particular topic. While, in this particular case, it may make sense to use chatGPT directly, what if there is documentation of data that chatGPT is not privy too, in that case, we will need to scrape that information, and provide that information to an LLM model to answer inquiries. We can do this through fine-tuning or prompt engineering. This work focuses on building RAG + LLM configuration, simulating automatic prompt engineering (context + inquiry). 
 What above shows is, if we can provide proper context, searched using embeddings from extensive knowledge we scraped, to an LLM model, addition of that context will create factual and informative answers.
 
 ## Example run
-**Notes:** The respones have not been validated for accuracy. Insights will be slowly added here
+**Notes:**  
+
+The respones have not been validated for accuracy. Insights will be slowly added here
+
 **Model with context**
 - 
 **Model without context**
