@@ -119,16 +119,16 @@ Overall, the Edmonton Sports & Social Club is a vibrant community organization t
 
 Here's a breakdown and evaluation of the two responses, with a focus on factual accuracy, and an overall accuracy rating for each:
 
-Model Response with Context
+**Model Response with Context**
 
-**Strengths:**
+Strengths:
 
 General Description: 
 - Accurately identifies the Edmonton Sport & Social Club (ESSC) as a recreational organization aimed at fostering active lifestyles.
 - Mention of Sports and Social Activities: Highlights the focus on sports leagues, tournaments, and social events, which align with the ESSC's mission.
 - Community Focus: Correctly mentions fostering social interaction, community engagement, and health promotion.
 
-**Inaccuracies:**
+Inaccuracies:
 
 - Founding Date: Claims the ESSC was founded in 2006. The correct founding year is 2004, as per official sources.
 - Not-for-Profit Status: While it describes ESSC as a not-for-profit organization, this detail isn't explicitly mentioned in ESSC materials.
@@ -139,14 +139,14 @@ Overall Accuracy Rating: **7/10**
 
 While it provides a good high-level summary, it contains factual inaccuracies (e.g., founding year) and speculative statements.
 
-Model Response without Context
+**Model Response without Context**
 
-**Strengths:**
+Strengths:
 
 - Recreational and Social Activities: Correctly emphasizes the combination of sports, social, and recreational opportunities.
 - Programs and Services: Includes an array of activities, suggesting a wide range of offerings for adults.
 
-**Inaccuracies:**
+Inaccuracies:
 
 - Founding Year: Incorrectly claims the ESSC was founded in 1958. The correct year is 2004.
 - Youth Programs: Misleadingly suggests the ESSC offers youth programs, while the club's offerings are primarily for adults. The only youth-focused component is the separate GoPlay! program, which isn't mentioned here.
