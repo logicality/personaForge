@@ -10,23 +10,18 @@ Functionality implemented: RAG + LLM. Requires Ollama running on machine.
 
 **Why set it up like above? Why not use chatGPT to answer inquiry directly?**
 
-The goal of this is to show usage of a model that doesn't have extensive knowledge about a particular topic. While, in this particular case, it may make sense to use chatGPT directly, what if there is documentation of data that chatGPT is not privy too, in that case, we will need to scrape that information, and provide that information to an LLM model to answer inquiries. We can do this through fine-tuning or prompt engineering. This work focuses on building RAG + LLM configuration, simulating automatic prompt engineering (context + inquiry). 
-What above shows is, if we can provide proper context, searched using embeddings from extensive knowledge we scraped, to an LLM model, addition of that context will create factual and informative answers.
+The goal of this work is to showcase the application of a model that lacks extensive prior knowledge on a particular topic. While it may make sense in some scenarios to use ChatGPT directly, there are cases where critical documentation or data lies outside its accessible knowledge base. In such situations, we need to scrape the relevant information and integrate it with an LLM model to enable accurate and informed responses.
+
+This can be achieved through fine-tuning or prompt engineering. Specifically, this project focuses on building a RAG (Retrieval-Augmented Generation) + LLM configuration that simulates automatic prompt engineering by combining context and inquiry. The approach involves:
+- Scraping extensive data from external sources.
+- Using embeddings to search and retrieve relevant context.
+- Providing this context to an LLM model during inquiry handling.
+
+The outcome demonstrates that when we supplement an LLM with well-constructed and relevant context, the model generates factual and informative answers. This integration of scraped knowledge significantly enhances the model's utility and reliability.
 
 ## Example run: ESSC - Edmonton Social & Sport Club
 
-I thought going with Edmonton Social & Sport Club would be fun. I have played in multiple leagues through them, and I loved the experience. Also, it's local enough that the Ollama model won't have extensive knowledge about this organization. 
-
-**Notes:**  The respones have not been validated for accuracy. Insights will be slowly added here
-
-**Model with Context: Response Notes**
-
-- "Edmonton Sport & Social Club's official website at: https://www.edmontonsportandsocialclub.com" is incorrect, but technically this detail was present in context, so not hallucination. This detail (hallucination possibly) was likely generated during data gathering process by chatGPT 
-
-**Model without Context: Response Notes**
-
-Hallucinating: I imagine majority of the details are hallucination, but it's difficult to tell due to high level detail. What's interesting about hallucinated measures is, they are slightly different every run
-- "established in 1958" "serving over 3,000 members" 
+I thought, going with Edmonton Social & Sport Club would be fun! I have played in multiple leagues through them, even volunteered as EC, and I loved the experience! Also, it's local enough organization that the base Ollama model won't have extensive knowledge about them. 
 
 ### Process
 
